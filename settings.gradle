@@ -1,0 +1,2 @@
+include ':abbluetoothprinter'
+rootProject.name='AB Bluetooth Printer'
