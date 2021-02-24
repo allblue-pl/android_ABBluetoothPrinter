@@ -1,9 +1,9 @@
-<resources >
-    <string name="AppName" >AB Bluetooth Printer</string >
-
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="AppName">AB Bluetooth Printer</string>
     <string name="Bluetooth_BluetoothDevicesActivity_Title">Lista urządzeń</string>
     <string name="Bluetooth_Errors_CannotPairDevice">Nie udało się zparować urządzenia.</string>
     <string name="Bluetooth_GettingDevicesList">Trwa pobieranie listy dostępnych urządzeń...</string>
     <string name="Bluetooth_NotSupported">Bluetooth nie jest obsługiwany.</string>
     <string name="Bluetooth_PairingDevice">Parowanie urządzenia...</string>
-</resources >
+</resources>
