@@ -21,6 +21,11 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true" >
         <uses-library android:name="android.test.runner" />
+
+        <activity
+            android:name="pl.allblue.abbluetoothprinter.BluetoothDevicesActivity"
+            android:label="@string/Bluetooth_BluetoothDevicesActivity_Title" >
+        </activity>
     </application>
 
 </manifest>
