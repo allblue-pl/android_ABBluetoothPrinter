@@ -234,6 +234,8 @@ public class BluetoothPrinter
         BufferedOutputStream socket_os = new BufferedOutputStream(
                 this.socket.getOutputStream());
 
+        socket_os.flush();
+
         socket_os.write(bytes);
         socket_os.flush();
     }
