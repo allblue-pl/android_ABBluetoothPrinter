@@ -117,6 +117,16 @@ public class BluetoothPrinter
         return image;
     }
 
+    static private byte[] GetBytes_Init()
+    {
+        byte[] image = new byte[2];
+
+        image[0] = 0x1b;
+        image[1] = 0x40;
+
+        return image;
+    }
+
     static private byte[] GetBytes_Line()
     {
         byte[] line = new byte[7];
@@ -206,12 +216,12 @@ public class BluetoothPrinter
 
     public void printImage(Bitmap image, int width) throws IOException
     {
+        byte[] init_bytes = BluetoothPrinter.GetBytes_Init();
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
-
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
 
+        this.sendBytes(init_bytes);
         this.sendBytes(image_bytes);
-
         this.sendBytes(empty_bytes);
     }
 
