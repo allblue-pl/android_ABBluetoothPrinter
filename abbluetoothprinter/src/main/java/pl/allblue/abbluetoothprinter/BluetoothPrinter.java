@@ -206,20 +206,9 @@ public class BluetoothPrinter
 
     public void printImage(Bitmap image, int width) throws IOException
     {
-//        if (!this.isConnected())
-//            throw new AssertionError("Printer not connected.");
-
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
 
-//        byte[] line_bytes = BluetoothPrinter.GetBytes_Line();
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
-
-//        byte[] all_bytes = BluetoothPrinter.GetBytes_Combine(new byte[][] {
-////                line_bytes, line_bytes, line_bytes,
-//                image_bytes
-//        });
-
-//        this.sendBytes(empty_bytes);
 
         this.sendBytes(image_bytes);
 

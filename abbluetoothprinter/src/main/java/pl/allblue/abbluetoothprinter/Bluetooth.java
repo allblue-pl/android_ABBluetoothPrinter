@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -20,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Bluetooth
 {
 
-    static public boolean Enable(final Activity activity, int request_code,
+    static public boolean Enable(final AppCompatActivity activity, int request_code,
             final OnEnabled listener)
     {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -72,7 +73,7 @@ public class Bluetooth
         return true;
     }
 
-    static public void PairDevice(final Activity activity,
+    static public void PairDevice(final AppCompatActivity activity,
             final BluetoothDevice device, final String pin,
             final OnDevicePairedListener listener)
     {
