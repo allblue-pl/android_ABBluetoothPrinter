@@ -31,13 +31,17 @@ public class BluetoothDevices
             listeners_OnBluetoothDeviceDiscovered = null;
 
 
-    public BluetoothDevices(int[] supported_device_classes)
+    public BluetoothDevices(Activity activity, int[] supported_device_classes)
     {
         this.supportedDeviceClasses = supported_device_classes;
 
         this.adapter = BluetoothAdapter.getDefaultAdapter();
-        for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
-            this.devices_Add(bt_device, true);
+        try {
+            for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
+                this.devices_Add(activity, bt_device, true);
+        } catch (SecurityException e) {
+            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+        }
     }
 
     public void discover(Activity activity)
@@ -77,21 +81,29 @@ public class BluetoothDevices
                     BluetoothDevice device = intent.getParcelableExtra(
                             BluetoothDevice.EXTRA_DEVICE);
 
-                    self.devices_Add(device, false);
+                    self.devices_Add(activity, device, false);
                 }
             }
         };
         activity.registerReceiver(this.receiver, new IntentFilter(
                 BluetoothDevice.ACTION_FOUND));
 
-        this.adapter.startDiscovery();
+        try {
+            this.adapter.startDiscovery();
+        } catch (SecurityException e) {
+            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+        }
     }
 
-    private void devices_Add(BluetoothDevice device, boolean is_paired)
+    private void devices_Add(Activity activity, BluetoothDevice device, boolean is_paired)
     {
-        if (!this.isDeviceClassSupported(device.getBluetoothClass()
-                .getMajorDeviceClass()))
-            return;
+        try {
+            if (!this.isDeviceClassSupported(device.getBluetoothClass()
+                    .getMajorDeviceClass()))
+                return;
+        } catch (SecurityException e) {
+            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+        }
 
         if (!this.devices_Exists(device)) {
             BluetoothDeviceInfo device_info = new BluetoothDeviceInfo(device,

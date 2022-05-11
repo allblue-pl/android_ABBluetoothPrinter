@@ -38,7 +38,7 @@ public class BluetoothDevicesActivity extends ListActivity
     {
         super.onCreate(saved_instance_state);
 
-        this.devices = new BluetoothDevices(this.getIntent().getExtras().getIntArray(
+        this.devices = new BluetoothDevices(this, this.getIntent().getExtras().getIntArray(
                 BluetoothDevicesActivity.Extras_SupportedDeviceClasses));
 
         this.devicesAdapter = new ArrayAdapter<>(this, R.layout.list_item_black);
@@ -50,7 +50,11 @@ public class BluetoothDevicesActivity extends ListActivity
             @Override
             public void onDiscovered(BluetoothDeviceInfo device_info)
             {
-                self.devicesAdapter.add(device_info.device.getName());
+                try {
+                    self.devicesAdapter.add(device_info.device.getName());
+                } catch (SecurityException e) {
+                    Toast.ShowMessage(self, self.getString(R.string.Bluetooth_BluetoothPermissionError));
+                }
                 self.devicesAdapter.notifyDataSetInvalidated();
             }
         });

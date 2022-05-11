@@ -1,5 +1,6 @@
 package pl.allblue.abbluetoothprinter;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
@@ -154,7 +155,7 @@ public class BluetoothPrinter
         this.device = device;
     }
 
-    public void connect(final OnConnectedListener listener)
+    public void connect(Activity activity, final OnConnectedListener listener)
     {
         final BluetoothPrinter self = this;
 
@@ -177,6 +178,9 @@ public class BluetoothPrinter
                 try {
                     self.socket = self.device.createRfcommSocketToServiceRecord(
                             self.device.getUuids()[0].getUuid());
+                } catch (SecurityException e) {
+                    Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+                    return;
                 } catch (final IOException e) {
                     listener.onError(e);
                     return;
@@ -184,6 +188,9 @@ public class BluetoothPrinter
 
                 try {
                     self.socket.connect();
+                } catch (SecurityException e) {
+                    Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+                    return;
                 } catch (IOException e) {
                     listener.onError(e);
                     return;
