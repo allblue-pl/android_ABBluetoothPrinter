@@ -60,11 +60,22 @@ public class Bluetooth
         }
 
         /* Request Required Permissions */
-        if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
+        String[] requiredPermissions = {
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+        boolean hasRequiredPermissions = true;
+        for (int i = 0; i < requiredPermissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(activity, requiredPermissions[i]) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                hasRequiredPermissions = false;
+                break;
+            }
+        }
+        if (!hasRequiredPermissions) {
             ActivityCompat.requestPermissions(activity,
-                    new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                    requiredPermissions,
                     request_code);
 
             return false;
