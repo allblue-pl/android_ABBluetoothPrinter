@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.os.Build;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +30,37 @@ public class Bluetooth
         /* Bluetooth Not Supported */
         if (adapter == null) {
             listener.onEnabled(EnableResult.NotSupported);
+            return false;
+        }
+
+        /* Request Required Permissions */
+        String[] requiredPermissions = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requiredPermissions = new String[] {
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN,
+            };
+        } else {
+            requiredPermissions = new String[] {
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+            };
+        }
+
+        boolean hasRequiredPermissions = true;
+        for (int i = 0; i < requiredPermissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(activity, requiredPermissions[i]) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                hasRequiredPermissions = false;
+                break;
+            }
+        }
+        if (!hasRequiredPermissions) {
+            ActivityCompat.requestPermissions(activity,
+                    requiredPermissions,
+                    request_code);
+
             return false;
         }
 
@@ -57,28 +89,6 @@ public class Bluetooth
 
                 return false;
             }
-        }
-
-        /* Request Required Permissions */
-        String[] requiredPermissions = {
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        };
-        boolean hasRequiredPermissions = true;
-        for (int i = 0; i < requiredPermissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(activity, requiredPermissions[i]) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                hasRequiredPermissions = false;
-                break;
-            }
-        }
-        if (!hasRequiredPermissions) {
-            ActivityCompat.requestPermissions(activity,
-                    requiredPermissions,
-                    request_code);
-
-            return false;
         }
 
         return true;
