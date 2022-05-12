@@ -202,6 +202,12 @@ public class BluetoothPrinter
         connect_thread.start();
     }
 
+    public void clearBuffer() throws IOException
+    {
+        byte[] init_bytes = BluetoothPrinter.GetBytes_Init();
+        this.sendBytes(init_bytes);
+    }
+
     public void disconnect()
     {
         if (this.socket != null) {
@@ -223,11 +229,9 @@ public class BluetoothPrinter
 
     public void printImage(Bitmap image, int width) throws IOException
     {
-        byte[] init_bytes = BluetoothPrinter.GetBytes_Init();
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
 
-        this.sendBytes(init_bytes);
         this.sendBytes(image_bytes);
         this.sendBytes(empty_bytes);
     }
@@ -239,8 +243,6 @@ public class BluetoothPrinter
 
         BufferedOutputStream socket_os = new BufferedOutputStream(
                 this.socket.getOutputStream());
-
-        socket_os.flush();
 
         socket_os.write(bytes);
         socket_os.flush();
