@@ -1,5 +1,6 @@
 package pl.allblue.abbluetoothprinter;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -35,6 +37,17 @@ public class BluetoothDevices
     {
         this.supportedDeviceClasses = supported_device_classes;
 
+        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_ADMIN, android.Manifest.permission.BLUETOOTH_CONNECT};
+        for (String permission : permissions) {
+            if (activity.checkSelfPermission(permission) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                Log.d("BTDeviceTest", "No Permission.");
+                activity.requestPermissions(permissions, 0);
+                return;
+            } else
+                Log.d("BTDeviceTest", "Yes Permission.");
+        }
+
         this.adapter = BluetoothAdapter.getDefaultAdapter();
         try {
             for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
@@ -46,7 +59,7 @@ public class BluetoothDevices
 
     public void discover(Activity activity)
     {
-        this.finishDiscovery(activity);
+//        this.finishDiscovery(activity);
         this.createReceiver(activity);
     }
 
@@ -73,9 +86,15 @@ public class BluetoothDevices
     {
         final BluetoothDevices self = this;
 
+        Log.d("BTDeviceTest", "Created receiver.");
+
+        this.adapter = BluetoothAdapter.getDefaultAdapter();
+
         this.receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d("BTDeviceTest", "sth is happening: ");
+
                 final String action = intent.getAction();
                 if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                     BluetoothDevice device = intent.getParcelableExtra(
@@ -85,11 +104,17 @@ public class BluetoothDevices
                 }
             }
         };
-        activity.registerReceiver(this.receiver, new IntentFilter(
-                BluetoothDevice.ACTION_FOUND));
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        activity.registerReceiver(this.receiver, filter);
 
         try {
+            Log.d("BTDeviceTest", "Before");
             this.adapter.startDiscovery();
+            Log.d("BTDeviceTest", "After");
         } catch (SecurityException e) {
             Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
         }
