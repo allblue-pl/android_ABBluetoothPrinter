@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -37,15 +38,28 @@ public class BluetoothDevices
     {
         this.supportedDeviceClasses = supported_device_classes;
 
-        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_ADMIN, android.Manifest.permission.BLUETOOTH_CONNECT};
-        for (String permission : permissions) {
+        String[] requiredPermissions = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requiredPermissions = new String[] {
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN,
+            };
+        } else {
+            requiredPermissions = new String[] {
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+
+            };
+        }
+
+        for (String permission : requiredPermissions) {
             if (activity.checkSelfPermission(permission) !=
                     PackageManager.PERMISSION_GRANTED) {
-                Log.d("BTDeviceTest", "No Permission.");
-                activity.requestPermissions(permissions, 0);
+                activity.requestPermissions(requiredPermissions, 0);
                 return;
-            } else
-                Log.d("BTDeviceTest", "Yes Permission.");
+            }
         }
 
         this.adapter = BluetoothAdapter.getDefaultAdapter();
