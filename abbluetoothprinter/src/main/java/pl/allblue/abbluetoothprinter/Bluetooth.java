@@ -19,6 +19,16 @@ import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Required permissions:
+ * <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+ * <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+ *         android:usesPermissionFlags="neverForLocation" />
+ * <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+ * <uses-permission android:name="android.permission.BLUETOOTH" />
+ * <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+ */
+
 public class Bluetooth
 {
 
