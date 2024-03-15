@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.ParcelUuid;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class BluetoothPrinter
 {
 
     static public final int BluetoothDevicesClass = 1536;
+    static public final String PrintingService = "00001101";
     static public boolean UseTechnologicWorkaround = false;
 
     static private byte[] GetBytes_Combine(byte[][] byte_parts)
@@ -176,8 +178,24 @@ public class BluetoothPrinter
                 }
 
                 try {
+                    ParcelUuid printerUuid = null;
+                    ParcelUuid[] uuids = self.device.getUuids();
+                    for (int i = 0; i < uuids.length; i++) {
+                        if (uuids[i].getUuid().toString().indexOf(
+                                BluetoothPrinter.PrintingService) != 0)
+                            continue;
+                        printerUuid = uuids[i];
+                        break;
+                    }
+
+                    if (printerUuid == null) {
+                        listener.onError(new IOException(
+                                "Cannot find printing service."));
+                        return;
+                    }
+
                     self.socket = self.device.createRfcommSocketToServiceRecord(
-                            self.device.getUuids()[0].getUuid());
+                            printerUuid.getUuid());
                 } catch (SecurityException e) {
                     Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
                     return;
