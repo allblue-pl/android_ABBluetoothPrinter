@@ -33,7 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Bluetooth
 {
 
-    static public boolean Enable(final AppCompatActivity activity, int request_code,
+    static public boolean Enable(final Activity activity, int request_code,
             final OnEnabled listener)
     {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -107,7 +107,7 @@ public class Bluetooth
         return true;
     }
 
-    static public void PairDevice(final AppCompatActivity activity,
+    static public void PairDevice(final Activity activity,
             final BluetoothDevice device, final String pin,
             final OnDevicePairedListener listener)
     {
