@@ -30,7 +30,8 @@ public class BluetoothPrinter
 
         int current_index = 0;
         for (int i = 0; i < byte_parts.length; i++) {
-            System.arraycopy(byte_parts[i], 0, combined_bytes, current_index, byte_parts[i].length);
+            System.arraycopy(byte_parts[i], 0, combined_bytes, current_index,
+                    byte_parts[i].length);
             current_index += byte_parts[i].length;
         }
 
@@ -245,13 +246,19 @@ public class BluetoothPrinter
         return this.socket.isConnected();
     }
 
-    public void printImage(Bitmap image, int width) throws IOException
+    public void printImage(Bitmap image, int width, int emptyWidth,
+            int emptyHeight) throws IOException
     {
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
 
         this.sendBytes(image_bytes);
         this.sendBytes(empty_bytes);
+    }
+
+    public void printImage(Bitmap image, int width) throws IOException
+    {
+        this.printImage(image, width, 100, 30);
     }
 
     public void sendBytes(byte[] bytes) throws IOException

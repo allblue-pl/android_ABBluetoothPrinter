@@ -104,15 +104,11 @@ public class BluetoothDevices
     {
         final BluetoothDevices self = this;
 
-        Log.d("BTDeviceTest", "Created receiver.");
-
         this.adapter = BluetoothAdapter.getDefaultAdapter();
 
         this.receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("BTDeviceTest", "sth is happening: ");
-
                 final String action = intent.getAction();
                 if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                     BluetoothDevice device = intent.getParcelableExtra(
@@ -130,9 +126,7 @@ public class BluetoothDevices
         activity.registerReceiver(this.receiver, filter);
 
         try {
-            Log.d("BTDeviceTest", "Before");
             this.adapter.startDiscovery();
-            Log.d("BTDeviceTest", "After");
         } catch (SecurityException e) {
             Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
         }
