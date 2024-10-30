@@ -33,8 +33,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Bluetooth
 {
 
-    static public boolean Enable(final Activity activity, int request_code,
-            final OnEnabled listener)
+    static public boolean Enable(final Activity activity, int enableRequestCode,
+            int permissionRequestCode, final OnEnabled listener)
     {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -70,9 +70,8 @@ public class Bluetooth
             }
         }
         if (!hasRequiredPermissions) {
-            ActivityCompat.requestPermissions(activity,
-                    requiredPermissions,
-                    request_code);
+            ActivityCompat.requestPermissions(activity, requiredPermissions,
+                    permissionRequestCode);
 
             return false;
         }
@@ -81,15 +80,13 @@ public class Bluetooth
         if (!adapter.isEnabled()) {
             if (adapter.getState() == BluetoothAdapter.STATE_OFF) {
                 Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                activity.startActivityForResult(i, request_code);
+                activity.startActivityForResult(i, enableRequestCode);
 
                 return false;
             } else if (adapter.getState() == BluetoothAdapter.STATE_TURNING_ON) {
-                activity.registerReceiver(new BroadcastReceiver()
-                {
+                activity.registerReceiver(new BroadcastReceiver() {
                     @Override
-                    public void onReceive(Context context, Intent intent)
-                    {
+                    public void onReceive(Context context, Intent intent) {
                         if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
                             if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)
                                     == BluetoothAdapter.STATE_ON) {
