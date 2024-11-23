@@ -2,10 +2,9 @@ apply plugin: 'com.android.library'
 
 android {
 	namespace "pl.allblue.abbluetoothprinter"
-    compileSdkVersion 34
+    compileSdk 35
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
