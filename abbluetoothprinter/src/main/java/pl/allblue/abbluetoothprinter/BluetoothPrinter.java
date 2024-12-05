@@ -198,7 +198,7 @@ public class BluetoothPrinter
                     self.socket = self.device.createRfcommSocketToServiceRecord(
                             printerUuid.getUuid());
                 } catch (SecurityException e) {
-                    Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+                    Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
                     return;
                 } catch (final IOException e) {
                     listener.onError(e);
@@ -208,7 +208,7 @@ public class BluetoothPrinter
                 try {
                     self.socket.connect();
                 } catch (SecurityException e) {
-                    Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+                    Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
                     return;
                 } catch (IOException e) {
                     listener.onError(e);

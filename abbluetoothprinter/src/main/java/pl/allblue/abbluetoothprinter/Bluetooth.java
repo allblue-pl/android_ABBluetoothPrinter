@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,7 +33,7 @@ public class Bluetooth
 {
 
     static public boolean Enable(final Activity activity, int enableRequestCode,
-            int permissionRequestCode, final OnEnabled listener)
+            int permissionsRequestCode, final OnEnabled listener)
     {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -71,7 +70,7 @@ public class Bluetooth
         }
         if (!hasRequiredPermissions) {
             ActivityCompat.requestPermissions(activity, requiredPermissions,
-                    permissionRequestCode);
+                    permissionsRequestCode);
 
             return false;
         }
@@ -140,9 +139,9 @@ public class Bluetooth
                     } catch (InvocationTargetException e) {
                         // Do nothing.
                     } catch (Exception e) {
-                        Toast.ShowMessage(activity,
+                        Toast.showMessage(activity,
                                 activity.getResources().getString(
-                                R.string.Bluetooth_Errors_CannotPairDevice));
+                                R.string.bluetooth_errors_cannot_pair_device));
                         Log.e("Bluetooth", "Cannot pair bluetooth printer.", e);
                         return;
                     }
@@ -153,8 +152,8 @@ public class Bluetooth
 
             device.getClass().getMethod("createBond").invoke(device);
         } catch (Exception e) {
-            Toast.ShowMessage(activity,
-                    activity.getResources().getString(R.string.Bluetooth_Errors_CannotPairDevice));
+            Toast.showMessage(activity,
+                    activity.getResources().getString(R.string.bluetooth_errors_cannot_pair_device));
             Log.d("Bluetooth", "Cannot pair bluetooth printer.", e);
             return;
         }

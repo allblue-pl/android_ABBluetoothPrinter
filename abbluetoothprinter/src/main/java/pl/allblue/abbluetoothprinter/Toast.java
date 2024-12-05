@@ -6,7 +6,7 @@ import android.content.Context;
 public class Toast
 {
 
-    static public void ShowMessage(final Activity activity, final CharSequence message)
+    static public void showMessage(final Activity activity, final CharSequence message)
     {
         activity.runOnUiThread(new Runnable() {
             @Override

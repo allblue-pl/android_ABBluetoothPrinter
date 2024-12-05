@@ -13,7 +13,7 @@
     <application>
         <activity
                 android:name=".BluetoothDevicesActivity"
-                android:label="@string/Bluetooth_BluetoothDevicesActivity_Title">
+                android:label="@string/bluetooth_bluetooth_devices_activity_title">
         </activity>
     </application>
 </manifest>

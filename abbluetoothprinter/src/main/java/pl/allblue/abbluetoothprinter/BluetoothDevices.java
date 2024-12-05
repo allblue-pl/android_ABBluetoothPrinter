@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +37,29 @@ public class BluetoothDevices
             listeners_OnBluetoothDeviceDiscovered = null;
 
 
-    public BluetoothDevices(Activity activity, int[] supported_device_classes)
+    public BluetoothDevices(int[] supported_device_classes)
     {
         this.supportedDeviceClasses = supported_device_classes;
+    }
 
+    public void discover(Activity activity)
+    {
+//        this.finishDiscovery(activity);
+        this.createReceiver(activity);
+    }
+
+    public void finishDiscovery(Activity activity)
+    {
+        if (this.receiver != null)
+            activity.unregisterReceiver(this.receiver);
+    }
+
+    public List<BluetoothDeviceInfo> getDeviceInfos()
+    {
+        return this.deviceInfos;
+    }
+
+    public boolean init(Activity activity, int permissionsRequestCode) {
         String[] requiredPermissions = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             requiredPermissions = new String[] {
@@ -61,8 +79,9 @@ public class BluetoothDevices
         for (String permission : requiredPermissions) {
             if (activity.checkSelfPermission(permission) !=
                     PackageManager.PERMISSION_GRANTED) {
-                activity.requestPermissions(requiredPermissions, 0);
-                return;
+                activity.requestPermissions(requiredPermissions,
+                        permissionsRequestCode);
+                return false;
             }
         }
 
@@ -71,25 +90,12 @@ public class BluetoothDevices
             for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
                 this.devices_Add(activity, bt_device, true);
         } catch (SecurityException e) {
-            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+            Toast.showMessage(activity, activity.getString(
+                    R.string.bluetooth_bluetooth_permission_error));
+            return false;
         }
-    }
 
-    public void discover(Activity activity)
-    {
-//        this.finishDiscovery(activity);
-        this.createReceiver(activity);
-    }
-
-    public void finishDiscovery(Activity activity)
-    {
-        if (this.receiver != null)
-            activity.unregisterReceiver(this.receiver);
-    }
-
-    public List<BluetoothDeviceInfo> getDeviceInfos()
-    {
-        return this.deviceInfos;
+        return true;
     }
 
     public void setOnDiscoveredListener(OnDiscoveredListener listener)
@@ -128,7 +134,7 @@ public class BluetoothDevices
         try {
             this.adapter.startDiscovery();
         } catch (SecurityException e) {
-            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+            Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
         }
     }
 
@@ -139,7 +145,7 @@ public class BluetoothDevices
                     .getMajorDeviceClass()))
                 return;
         } catch (SecurityException e) {
-            Toast.ShowMessage(activity, activity.getString(R.string.Bluetooth_BluetoothPermissionError));
+            Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
         }
 
         if (!this.devices_Exists(device)) {

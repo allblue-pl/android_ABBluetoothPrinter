@@ -1,10 +1,10 @@
 <resources >
     <string name="AppName" >AB Bluetooth Printer</string >
 
-    <string name="Bluetooth_BluetoothDevicesActivity_Title">Lista urządzeń</string>
-    <string name="Bluetooth_BluetoothPermissionError">Brak pozwolenia na korzytanie z Bluetooth.</string>
-    <string name="Bluetooth_Errors_CannotPairDevice">Nie udało się zparować urządzenia.</string>
-    <string name="Bluetooth_GettingDevicesList">Trwa pobieranie listy dostępnych urządzeń...</string>
-    <string name="Bluetooth_NotSupported">Bluetooth nie jest obsługiwany.</string>
-    <string name="Bluetooth_PairingDevice">Parowanie urządzenia...</string>
+    <string name="bluetooth_bluetooth_devices_activity_title">Lista urządzeń</string>
+    <string name="bluetooth_bluetooth_permission_error">Brak pozwolenia na korzytanie z Bluetooth.</string>
+    <string name="bluetooth_errors_cannot_pair_device">Nie udało się zparować urządzenia.</string>
+    <string name="bluetooth_getting_devices_list">Trwa pobieranie listy dostępnych urządzeń...</string>
+    <string name="bluetooth_not_supported">Bluetooth nie jest obsługiwany.</string>
+    <string name="bluetooth_pairing_device">Parowanie urządzenia...</string>
 </resources >
