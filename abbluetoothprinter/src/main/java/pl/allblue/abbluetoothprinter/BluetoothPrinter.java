@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.ParcelUuid;
+import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
@@ -119,6 +121,18 @@ public class BluetoothPrinter
         }
 
         return image;
+    }
+
+    static private byte[] GetBytes_FeedAndCur() {
+        byte[] bytes = new byte[4];
+
+        /* Print Format */
+        bytes[0] = 0x1d;
+        bytes[1] = 0x56;
+        bytes[2] = 66;
+        bytes[3] = 0x00;
+
+        return bytes;
     }
 
     static private byte[] GetBytes_Init()
@@ -250,6 +264,7 @@ public class BluetoothPrinter
             int emptyHeight) throws IOException
     {
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
+//        byte[] empty_bytes = BluetoothPrinter.GetBytes_FeedAndCut();
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
 
         this.sendBytes(image_bytes);
