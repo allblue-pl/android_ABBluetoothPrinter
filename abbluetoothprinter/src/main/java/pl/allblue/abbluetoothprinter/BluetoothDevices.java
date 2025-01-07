@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class BluetoothDevices
         return this.deviceInfos;
     }
 
-    public boolean init(Activity activity, int permissionsRequestCode) {
+    public boolean init(Activity activity) {
         String[] requiredPermissions = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             requiredPermissions = new String[] {
@@ -78,11 +79,8 @@ public class BluetoothDevices
 
         for (String permission : requiredPermissions) {
             if (activity.checkSelfPermission(permission) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                activity.requestPermissions(requiredPermissions,
-                        permissionsRequestCode);
+                    PackageManager.PERMISSION_GRANTED)
                 return false;
-            }
         }
 
         this.adapter = BluetoothAdapter.getDefaultAdapter();
@@ -90,24 +88,21 @@ public class BluetoothDevices
             for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
                 this.devices_Add(activity, bt_device, true);
         } catch (SecurityException e) {
-            Toast.showMessage(activity, activity.getString(
-                    R.string.bluetooth_bluetooth_permission_error));
+            Log.d("BluetoothDevices", "Cannot get bonded devices.", e);
             return false;
         }
 
         return true;
     }
 
-    public void setOnDiscoveredListener(OnDiscoveredListener listener)
-    {
+    public void setOnDiscoveredListener(OnDiscoveredListener listener) {
         this.listeners_OnBluetoothDeviceDiscovered = listener;
         for (BluetoothDeviceInfo device_info : this.deviceInfos)
             listener.onDiscovered(device_info);
     }
 
 
-    private void createReceiver(Activity activity)
-    {
+    private void createReceiver(Activity activity) {
         final BluetoothDevices self = this;
 
         this.adapter = BluetoothAdapter.getDefaultAdapter();
@@ -138,8 +133,7 @@ public class BluetoothDevices
         }
     }
 
-    private void devices_Add(Activity activity, BluetoothDevice device, boolean is_paired)
-    {
+    private void devices_Add(Activity activity, BluetoothDevice device, boolean is_paired) {
         try {
             if (!this.isDeviceClassSupported(device.getBluetoothClass()
                     .getMajorDeviceClass()))
@@ -159,8 +153,7 @@ public class BluetoothDevices
         }
     }
 
-    public boolean devices_Exists(BluetoothDevice device)
-    {
+    public boolean devices_Exists(BluetoothDevice device) {
         for (BluetoothDeviceInfo t_device_info : this.deviceInfos) {
             if (device.getAddress().equals(t_device_info.device.getAddress()))
                 return true;
@@ -169,8 +162,7 @@ public class BluetoothDevices
         return false;
     }
 
-    private boolean isDeviceClassSupported(int device_class)
-    {
+    private boolean isDeviceClassSupported(int device_class) {
         if (this.supportedDeviceClasses == null)
             return true;
 
@@ -184,11 +176,8 @@ public class BluetoothDevices
 
 
 
-    public interface OnDiscoveredListener
-    {
-
+    public interface OnDiscoveredListener {
         void onDiscovered(BluetoothDeviceInfo device_info);
-
     }
 
 }

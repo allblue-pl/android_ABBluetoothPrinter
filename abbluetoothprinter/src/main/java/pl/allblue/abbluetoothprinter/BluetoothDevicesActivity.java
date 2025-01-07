@@ -37,8 +37,7 @@ public class BluetoothDevicesActivity extends ListActivity
 
 
     public void discoverDevices() {
-        if (!this.devices.init(this, BluetoothDevicesActivity
-                .PermissionsRequest_DiscoverDevices))
+        if (!this.devices.init(this))
             return;
 
         this.devicesAdapter = new ArrayAdapter<>(this, R.layout.list_item_black);

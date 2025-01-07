@@ -17,7 +17,6 @@ import java.io.IOException;
  */
 public class BluetoothPrinter
 {
-
     static public final int BluetoothDevicesClass = 1536;
     static public final String PrintingService = "00001101";
     static public boolean UseTechnologicWorkaround = false;
@@ -167,13 +166,11 @@ public class BluetoothPrinter
     private BluetoothDevice device = null;
     private BluetoothSocket socket = null;
 
-    public BluetoothPrinter(BluetoothDevice device)
-    {
+    public BluetoothPrinter(BluetoothDevice device) {
         this.device = device;
     }
 
-    public void connect(Activity activity, final OnConnectedListener listener)
-    {
+    public void connect(Activity activity, final OnConnectedListener listener) {
         final BluetoothPrinter self = this;
 
         Thread connect_thread = new Thread(new Runnable() {
@@ -195,12 +192,14 @@ public class BluetoothPrinter
                 try {
                     ParcelUuid printerUuid = null;
                     ParcelUuid[] uuids = self.device.getUuids();
-                    for (int i = 0; i < uuids.length; i++) {
-                        if (uuids[i].getUuid().toString().indexOf(
-                                BluetoothPrinter.PrintingService) != 0)
-                            continue;
-                        printerUuid = uuids[i];
-                        break;
+                    if (uuids != null) {
+                        for (int i = 0; i < uuids.length; i++) {
+                            if (uuids[i].getUuid().toString().indexOf(
+                                    BluetoothPrinter.PrintingService) != 0)
+                                continue;
+                            printerUuid = uuids[i];
+                            break;
+                        }
                     }
 
                     if (printerUuid == null) {
@@ -247,9 +246,13 @@ public class BluetoothPrinter
             try {
                 this.socket.close();
             } catch (IOException e) {
-                // Do nothing.
+                Log.d("BluetoothPrinter", "disconnect()", e);
             }
         }
+    }
+
+    public BluetoothDevice getDevice() {
+        return device;
     }
 
     public boolean isConnected()

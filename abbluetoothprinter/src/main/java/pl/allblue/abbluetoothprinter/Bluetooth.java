@@ -103,6 +103,16 @@ public class Bluetooth
         return true;
     }
 
+    static public boolean isEnabled() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+
+        /* Bluetooth Not Supported */
+        if (adapter == null)
+            return false;
+
+        return adapter.isEnabled();
+    }
+
     static public void PairDevice(final Activity activity,
             final BluetoothDevice device, final String pin,
             final OnDevicePairedListener listener)
