@@ -67,6 +67,18 @@ public class BluetoothPrinter
         return image;
     }
 
+    static private byte[] GetBytes_FeedAndCut() {
+        byte[] bytes = new byte[4];
+
+        /* Print Format */
+        bytes[0] = 0x1d;
+        bytes[1] = 0x56;
+        bytes[2] = 66;
+        bytes[3] = 0x00;
+
+        return bytes;
+    }
+
     static private byte[] GetBytes_Image(Bitmap bitmap, int width)
     {
         if (bitmap == null)
@@ -173,63 +185,60 @@ public class BluetoothPrinter
     public void connect(Activity activity, final OnConnectedListener listener) {
         final BluetoothPrinter self = this;
 
-        Thread connect_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (self.socket != null) {
-                    if (self.socket.isConnected()) {
-                        listener.onConnected();
-                        return;
-                    }
-
-                    try {
-                        self.socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                try {
-                    ParcelUuid printerUuid = null;
-                    ParcelUuid[] uuids = self.device.getUuids();
-                    if (uuids != null) {
-                        for (int i = 0; i < uuids.length; i++) {
-                            if (uuids[i].getUuid().toString().indexOf(
-                                    BluetoothPrinter.PrintingService) != 0)
-                                continue;
-                            printerUuid = uuids[i];
-                            break;
-                        }
-                    }
-
-                    if (printerUuid == null) {
-                        listener.onError(new IOException(
-                                "Cannot find printing service."));
-                        return;
-                    }
-
-                    self.socket = self.device.createRfcommSocketToServiceRecord(
-                            printerUuid.getUuid());
-                } catch (SecurityException e) {
-                    Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
-                    return;
-                } catch (final IOException e) {
-                    listener.onError(e);
+        Thread connect_thread = new Thread(() -> {
+            if (self.socket != null) {
+                if (self.socket.isConnected()) {
+                    listener.onConnected();
                     return;
                 }
 
                 try {
-                    self.socket.connect();
-                } catch (SecurityException e) {
-                    Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
-                    return;
+                    self.socket.close();
                 } catch (IOException e) {
-                    listener.onError(e);
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                ParcelUuid printerUuid = null;
+                ParcelUuid[] uuids = self.device.getUuids();
+                if (uuids != null) {
+                    for (int i = 0; i < uuids.length; i++) {
+                        if (uuids[i].getUuid().toString().indexOf(
+                                BluetoothPrinter.PrintingService) != 0)
+                            continue;
+                        printerUuid = uuids[i];
+                        break;
+                    }
+                }
+
+                if (printerUuid == null) {
+                    listener.onError(new IOException(
+                            "Cannot find printing service."));
                     return;
                 }
 
-                listener.onConnected();
+                self.socket = self.device.createRfcommSocketToServiceRecord(
+                        printerUuid.getUuid());
+            } catch (SecurityException e) {
+                Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
+                return;
+            } catch (final IOException e) {
+                listener.onError(e);
+                return;
             }
+
+            try {
+                self.socket.connect();
+            } catch (SecurityException e) {
+                Toast.showMessage(activity, activity.getString(R.string.bluetooth_bluetooth_permission_error));
+                return;
+            } catch (IOException e) {
+                listener.onError(e);
+                return;
+            }
+
+            listener.onConnected();
         });
         connect_thread.start();
     }

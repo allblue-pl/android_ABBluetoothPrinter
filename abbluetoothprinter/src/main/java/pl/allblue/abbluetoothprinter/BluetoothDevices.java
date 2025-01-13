@@ -43,7 +43,7 @@ public class BluetoothDevices
         this.supportedDeviceClasses = supported_device_classes;
     }
 
-    public void discover(Activity activity)
+    public void startDiscovery(Activity activity)
     {
 //        this.finishDiscovery(activity);
         this.createReceiver(activity);
@@ -51,6 +51,14 @@ public class BluetoothDevices
 
     public void finishDiscovery(Activity activity)
     {
+        if (this.adapter != null) {
+            try {
+                adapter.cancelDiscovery();
+            } catch (SecurityException e) {
+                Log.e("BluetoothDevices",
+                        "Cannot cancel discovering bluetooth devices.", e);
+            }
+        }
         if (this.receiver != null)
             activity.unregisterReceiver(this.receiver);
     }
@@ -88,17 +96,15 @@ public class BluetoothDevices
             for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
                 this.devices_Add(activity, bt_device, true);
         } catch (SecurityException e) {
-            Log.d("BluetoothDevices", "Cannot get bonded devices.", e);
+            Log.e("BluetoothDevices", "Cannot get bonded devices.", e);
             return false;
         }
 
         return true;
     }
 
-    public void setOnDiscoveredListener(OnDiscoveredListener listener) {
+    public void setOnDeviceDiscoveredListener(OnDiscoveredListener listener) {
         this.listeners_OnBluetoothDeviceDiscovered = listener;
-        for (BluetoothDeviceInfo device_info : this.deviceInfos)
-            listener.onDiscovered(device_info);
     }
 
 
