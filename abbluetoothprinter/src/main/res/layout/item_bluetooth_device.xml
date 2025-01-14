@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:focusable="true"
-        android:clickable="true">
+        android:clickable="true"
+        android:paddingTop="0dp">
     <TextView
         android:id="@+id/deviceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="15dp"
         android:background="?android:attr/selectableItemBackground"
         style="?android:attr/textAppearanceSmall" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:foreground="@drawable/border_line" />
+        android:layout_height="1dp"
+        android:foreground="@drawable/border_line"
+        android:padding="0dp" />
 </LinearLayout>
-
-        <!--android:paddingStart="?android:attr/listPreferredItemPaddingStart"-->
-        <!--android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"-->
