@@ -24,14 +24,12 @@ public class BluetoothDeviceInfo implements Parcelable
     public android.bluetooth.BluetoothDevice device = null;
     public boolean isPaired = false;
 
-    public BluetoothDeviceInfo(android.bluetooth.BluetoothDevice device, boolean is_paired)
-    {
+    public BluetoothDeviceInfo(android.bluetooth.BluetoothDevice device, boolean is_paired) {
         this.device = device;
         this.isPaired = is_paired;
     }
 
-    public BluetoothDeviceInfo(Parcel in)
-    {
+    public BluetoothDeviceInfo(Parcel in) {
         this.device = (android.bluetooth.BluetoothDevice)in.readValue(
                 android.bluetooth.BluetoothDevice.class.getClassLoader());
         this.isPaired = in.readByte() != 0x00;
@@ -40,14 +38,12 @@ public class BluetoothDeviceInfo implements Parcelable
 
     /* Parcelable Overrides */
     @Override
-    public int describeContents()
-    {
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.device);
         dest.writeByte((byte)(isPaired ? 0x01 : 0x00));
     }

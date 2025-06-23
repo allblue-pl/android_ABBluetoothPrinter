@@ -12,8 +12,7 @@ public class Images
 {
 
     static public Bitmap GetBitmapFromAssets(Context context, String image_path)
-            throws IOException
-    {
+            throws IOException {
         AssetManager asset_manager = context.getAssets();
 
         InputStream istr = asset_manager.open(image_path);

@@ -38,19 +38,16 @@ public class BluetoothDevices
             listeners_OnBluetoothDeviceDiscovered = null;
 
 
-    public BluetoothDevices(int[] supported_device_classes)
-    {
+    public BluetoothDevices(int[] supported_device_classes) {
         this.supportedDeviceClasses = supported_device_classes;
     }
 
-    public void startDiscovery(Activity activity)
-    {
+    public void startDiscovery(Activity activity) {
 //        this.finishDiscovery(activity);
         this.createReceiver(activity);
     }
 
-    public void finishDiscovery(Activity activity)
-    {
+    public void finishDiscovery(Activity activity) {
         if (this.adapter != null) {
             try {
                 adapter.cancelDiscovery();
@@ -63,8 +60,7 @@ public class BluetoothDevices
             activity.unregisterReceiver(this.receiver);
     }
 
-    public List<BluetoothDeviceInfo> getDeviceInfos()
-    {
+    public List<BluetoothDeviceInfo> getDeviceInfos() {
         return this.deviceInfos;
     }
 

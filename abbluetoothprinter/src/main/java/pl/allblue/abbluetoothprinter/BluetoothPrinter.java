@@ -21,8 +21,7 @@ public class BluetoothPrinter
     static public final String PrintingService = "00001101";
     static public boolean UseTechnologicWorkaround = false;
 
-    static private byte[] GetBytes_Combine(byte[][] byte_parts)
-    {
+    static private byte[] GetBytes_Combine(byte[][] byte_parts) {
         int length = 0;
         for (int i = 0; i < byte_parts.length; i++)
             length += byte_parts[i].length;
@@ -39,8 +38,7 @@ public class BluetoothPrinter
         return combined_bytes;
     }
 
-    static private byte[] GetBytes_Empty(int width, int emptyWidth, int emptyHeight)
-    {
+    static private byte[] GetBytes_Empty(int width, int emptyWidth, int emptyHeight) {
         float f = ((float)width) / ((float)emptyWidth);
         int height = (int)(emptyHeight * f);
 
@@ -79,8 +77,7 @@ public class BluetoothPrinter
         return bytes;
     }
 
-    static private byte[] GetBytes_Image(Bitmap bitmap, int width)
-    {
+    static private byte[] GetBytes_Image(Bitmap bitmap, int width) {
         if (bitmap == null)
             return null;
 
@@ -146,8 +143,7 @@ public class BluetoothPrinter
         return bytes;
     }
 
-    static private byte[] GetBytes_Init()
-    {
+    static private byte[] GetBytes_Init() {
         byte[] image = new byte[2];
 
         image[0] = 0x1b;
@@ -156,8 +152,7 @@ public class BluetoothPrinter
         return image;
     }
 
-    static private byte[] GetBytes_Line()
-    {
+    static private byte[] GetBytes_Line() {
         byte[] line = new byte[7];
 
         String space = " ";
@@ -243,14 +238,12 @@ public class BluetoothPrinter
         connect_thread.start();
     }
 
-    public void clearBuffer() throws IOException
-    {
+    public void clearBuffer() throws IOException {
         byte[] init_bytes = BluetoothPrinter.GetBytes_Init();
         this.sendBytes(init_bytes);
     }
 
-    public void disconnect()
-    {
+    public void disconnect() {
         if (this.socket != null) {
             try {
                 this.socket.close();
@@ -264,8 +257,7 @@ public class BluetoothPrinter
         return device;
     }
 
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         if (this.socket == null)
             return false;
 
@@ -273,8 +265,7 @@ public class BluetoothPrinter
     }
 
     public void printImage(Bitmap image, int width, int emptyWidth,
-            int emptyHeight) throws IOException
-    {
+            int emptyHeight) throws IOException {
         byte[] empty_bytes = BluetoothPrinter.GetBytes_Empty(width, 100, 30);
 //        byte[] empty_bytes = BluetoothPrinter.GetBytes_FeedAndCut();
         byte[] image_bytes = BluetoothPrinter.GetBytes_Image(image, width);
@@ -283,13 +274,11 @@ public class BluetoothPrinter
         this.sendBytes(empty_bytes);
     }
 
-    public void printImage(Bitmap image, int width) throws IOException
-    {
+    public void printImage(Bitmap image, int width) throws IOException {
         this.printImage(image, width, 100, 30);
     }
 
-    public void sendBytes(byte[] bytes) throws IOException
-    {
+    public void sendBytes(byte[] bytes) throws IOException {
 //        if (!this.isConnected())
 //            throw new AssertionError("Printer not connected.");
 
@@ -301,8 +290,7 @@ public class BluetoothPrinter
     }
 
 
-    public interface OnConnectedListener
-    {
+    public interface OnConnectedListener {
         void onConnected();
         void onError(IOException e);
     }

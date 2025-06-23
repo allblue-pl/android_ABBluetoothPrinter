@@ -33,8 +33,7 @@ public class Bluetooth
 {
 
     static public boolean Enable(final Activity activity, int enableRequestCode,
-            int permissionsRequestCode, final OnEnabled listener)
-    {
+            int permissionsRequestCode, final OnEnabled listener) {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
         /* Bluetooth Not Supported */
@@ -115,8 +114,7 @@ public class Bluetooth
 
     static public void PairDevice(final Activity activity,
             final BluetoothDevice device, final String pin,
-            final OnDevicePairedListener listener)
-    {
+            final OnDevicePairedListener listener) {
         activity.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -170,20 +168,17 @@ public class Bluetooth
     }
 
 
-    public enum EnableResult
-    {
+    public enum EnableResult {
         Enabled,
         Failure,
         NotSupported
     }
 
-    public interface OnEnabled
-    {
+    public interface OnEnabled {
         void onEnabled(EnableResult result);
     }
 
-    public interface OnDevicePairedListener
-    {
+    public interface OnDevicePairedListener {
         void onPaired(BluetoothDevice device);
     }
 
