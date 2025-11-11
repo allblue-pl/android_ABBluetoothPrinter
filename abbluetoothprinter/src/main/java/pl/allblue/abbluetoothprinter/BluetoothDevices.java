@@ -137,6 +137,9 @@ public class BluetoothDevices
 
     private void devices_Add(Activity activity, BluetoothDevice device, boolean is_paired) {
         try {
+            if (device.getName() == null)
+                return;
+
             if (!this.isDeviceClassSupported(device.getBluetoothClass()
                     .getMajorDeviceClass()))
                 return;
