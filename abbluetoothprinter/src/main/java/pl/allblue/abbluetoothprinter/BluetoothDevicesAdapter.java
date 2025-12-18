@@ -1,6 +1,7 @@
 package pl.allblue.abbluetoothprinter;
 
 import android.bluetooth.BluetoothDevice;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,12 @@ public class BluetoothDevicesAdapter extends
             int position) {
         BluetoothDeviceInfo bdi = list.get(position);
         try {
-            holder.b().deviceName.setText(bdi.device.getName());
+            String deviceName = bdi.device.getName() == null ? "-" : bdi.device.getName();
+            String deviceAddress = bdi.device.getAddress() == null ? "" : ("[" +
+                    bdi.device.getAddress() + "]");
+            String displayName = deviceName + (deviceAddress.isEmpty() ? "" : (" " + deviceAddress));
+
+            holder.b().deviceName.setText(displayName);
         } catch (SecurityException e) {
             holder.b().deviceName.setText("<No Bluetooth Permission>");
         }
