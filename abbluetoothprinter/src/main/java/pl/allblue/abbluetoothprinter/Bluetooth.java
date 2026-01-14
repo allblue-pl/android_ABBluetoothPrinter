@@ -1,7 +1,6 @@
 package pl.allblue.abbluetoothprinter;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -10,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -32,7 +33,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Bluetooth
 {
 
-    static public boolean Enable(final Activity activity, int enableRequestCode,
+    static public boolean Enable(final AppCompatActivity activity,
+            ActivityResultLauncher<Intent> activityResultLauncher,
             int permissionsRequestCode, final OnEnabled listener) {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -78,7 +80,7 @@ public class Bluetooth
         if (!adapter.isEnabled()) {
             if (adapter.getState() == BluetoothAdapter.STATE_OFF) {
                 Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                activity.startActivityForResult(i, enableRequestCode);
+                activityResultLauncher.launch(i);
 
                 return false;
             } else if (adapter.getState() == BluetoothAdapter.STATE_TURNING_ON) {
@@ -112,7 +114,7 @@ public class Bluetooth
         return adapter.isEnabled();
     }
 
-    static public void PairDevice(final Activity activity,
+    static public void PairDevice(final AppCompatActivity activity,
             final BluetoothDevice device, final String pin,
             final OnDevicePairedListener listener) {
         activity.registerReceiver(new BroadcastReceiver() {

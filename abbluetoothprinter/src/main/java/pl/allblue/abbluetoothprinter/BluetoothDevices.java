@@ -87,10 +87,13 @@ public class BluetoothDevices
                 return false;
         }
 
+        Log.d("Test", "Looking for devices?");
+
         this.adapter = BluetoothAdapter.getDefaultAdapter();
         try {
-            for (BluetoothDevice bt_device : this.adapter.getBondedDevices())
+            for (BluetoothDevice bt_device : this.adapter.getBondedDevices()) {
                 this.devices_Add(activity, bt_device, true);
+            }
         } catch (SecurityException e) {
             Log.e("BluetoothDevices", "Cannot get bonded devices.", e);
             return false;

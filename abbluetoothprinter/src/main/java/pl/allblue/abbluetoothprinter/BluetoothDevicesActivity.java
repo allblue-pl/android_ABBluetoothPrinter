@@ -1,6 +1,5 @@
 package pl.allblue.abbluetoothprinter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Insets;
 import android.os.Build;
@@ -8,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +26,8 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
             "pl.allblue.bluetooth.BluetoothDevicesList.Result_Device";
 
 
-    static public void Start(Activity activity, int requestCode,
+    static public void Start(AppCompatActivity activity,
+                             ActivityResultLauncher<Intent> activityResultLauncher,
                              int[] deviceClasses, int themeColor, int themeColorDark) {
         Intent intent = new Intent(activity, BluetoothDevicesActivity.class);
         intent.putExtra(BluetoothDevicesActivity.Extras_SupportedDeviceClasses,
@@ -34,7 +35,7 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
         intent.putExtra(BluetoothDevicesActivity.Extras_ThemeColor, themeColor);
         intent.putExtra(BluetoothDevicesActivity.Extras_ThemeColorDark, themeColorDark);
 
-        activity.startActivityForResult(intent, requestCode);
+        activityResultLauncher.launch(intent);
     }
 
 
@@ -93,7 +94,7 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
 
             Intent intent = new Intent();
             intent.putExtra(BluetoothDevicesActivity.Result_Device, deviceInfo);
-            setResult(Activity.RESULT_OK, intent);
+            setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
         });
         b.list.setAdapter(listAdapter);
